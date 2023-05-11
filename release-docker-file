@@ -1,0 +1,45 @@
+
+#Debian-slim
+#1. Docker file will contain the rc branch
+#2. this would run the tests
+    #a. Python file that will have import statements
+#3. Manually run conda commands.
+
+
+#Windows-Base
+#4. Canary Build
+
+FROM --platform=$TARGETPLATFORM debian:stable-slim AS buildbase
+RUN apt-get update && apt-get install -y wget
+
+FROM --platform=$TARGETPLATFORM debian:stable-slim
+
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV PATH /opt/conda/bin:$PATH
+
+COPY dev/linux/setup.sh /tmp
+RUN bash /tmp/setup.sh
+
+COPY --from=buildbase /opt/conda /opt/conda
+
+ARG python_version=3.11
+
+COPY ./tests/requirements.txt /tmp
+
+# conda and test dependencies
+RUN /opt/conda/bin/conda install --update-all -y \
+    python=$python_version \
+    --file /tmp/requirements.txt && \
+    /opt/conda/bin/conda clean --all --yes
+
+RUN pytest --vv --color=yes -n=6 ./tests
+
+# Make /opt/conda world-writable to allow hardlinks during tests
+RUN chmod -R o+w /opt/conda/pkgs/*-*-*
+
+USER test_user
+
+WORKDIR /opt/conda-src
+
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["/bin/bash"]
