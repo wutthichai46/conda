@@ -1,7 +1,7 @@
 @CALL :CLEANUP
 
 :: preserve script for help
-@SET "_SCRIPT=%~0"
+@SET "_SCRIPT=%~f0"
 
 :: get source path
 @FOR %%P IN ("%~dp0\..") DO @SET "_SRC=%%~fP"
