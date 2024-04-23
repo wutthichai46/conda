@@ -4,9 +4,7 @@
 @SET "_SCRIPT=%~0"
 
 :: get source path
-@PUSHD "%~dp0\.."
-@SET "_SRC=%CD%"
-@POPD
+@FOR %%P IN ("%~dp0\..") DO @SET "_SRC=%%~fP"
 
 :: parse args
 :ARGS_LOOP

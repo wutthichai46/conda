@@ -2,4 +2,5 @@
 :: SPDX-License-Identifier: BSD-3-Clause
 
 @ECHO DeprecationWarning: 'deactivate' is deprecated. Use 'conda deactivate'. 1>&2
-conda.bat deactivate %*
+@CALL "%~dp0..\condabin\conda_hook.bat"
+conda deactivate %*

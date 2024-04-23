@@ -10,7 +10,7 @@
 :FIXUP43
 
 @SETLOCAL EnableDelayedExpansion
-@FOR %%A in ("%TMP%") do @SET TMP=%%~sA
+@FOR %%A IN ("%TMP%") DO @SET TMP=%%~sA
 :: It seems that it is not possible to have "CONDA_EXE=Something With Spaces"
 :: and %* to contain: activate "Something With Spaces does not exist".
 :: MSDOS associates the outer "'s and is unable to run very much at all.
@@ -32,7 +32,7 @@
 @IF %ErrorLevel% NEQ 0 @EXIT /B %ErrorLevel%
 @FOR /F %%i IN (%UNIQUE%) DO @SET _TEMP_SCRIPT_PATH=%%i
 @RMDIR /S /Q %UNIQUE_DIR%
-@FOR /F "delims=" %%A in (""!_TEMP_SCRIPT_PATH!"") DO @ENDLOCAL & @SET _TEMP_SCRIPT_PATH=%%~A
+@FOR /F "delims=" %%A IN (""!_TEMP_SCRIPT_PATH!"") DO @ENDLOCAL & @SET _TEMP_SCRIPT_PATH=%%~A
 @IF "%_TEMP_SCRIPT_PATH%" == "" @EXIT /B 1
 @IF NOT "%CONDA_PROMPT_MODIFIER%" == "" @CALL SET "PROMPT=%%PROMPT:%CONDA_PROMPT_MODIFIER%=%_empty_not_set_%%%"
 @CALL "%_TEMP_SCRIPT_PATH%"

@@ -1,15 +1,19 @@
 :: Copyright (C) 2012 Anaconda, Inc
 :: SPDX-License-Identifier: BSD-3-Clause
 
-@IF NOT DEFINED _CE_CONDA (
+@IF NOT DEFINED CONDA_EXE (
+  @FOR %%P IN ("%~dp0\..") DO @SET "__condaroot=%%~fP"
+
+  @SET "CONDA_EXE=%__condaroot%\Scripts\conda.exe"
   @SET _CE_M=
-  @SET "CONDA_EXE=%~dp0..\Scripts\conda.exe"
+  @SET _CE_CONDA=
+
+  @SET __condaroot=
 )
 @IF [%1]==[activate]   "%~dp0_conda_activate" %*
 @IF [%1]==[deactivate] "%~dp0_conda_activate" %*
 
-@SET CONDA_EXES="%CONDA_EXE%" %_CE_M% %_CE_CONDA%
-@CALL %CONDA_EXES% %*
+@CALL "%CONDA_EXE%" %_CE_M% %_CE_CONDA% %*
 
 @IF %errorlevel% NEQ 0 EXIT /B %errorlevel%
 
